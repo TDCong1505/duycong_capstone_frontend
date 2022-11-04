@@ -1,0 +1,62 @@
+
+
+@mixin button ($color:white,$width:50%){
+    background-color: $color;
+    min-height: 40px;
+    display: inline-block;
+    width: $width;
+    color: white;
+    font-size: 1rem;
+    line-height: 40px;
+    border-radius: 10px;
+}
+
+.container {
+    min-height: 500px;
+    width: 300px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    margin: 1rem 0 1rem 0;
+    position: relative;
+    text-overflow: clip;
+    .image {
+        min-height: 150px;
+        width: 100%;
+    }
+    .name {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    .price {
+        text-align: center;
+        font-size: 1.5rem;
+        color: #a92f2f;
+    }
+    .des {
+        display: block;
+        text-overflow: ellipsis;
+    }
+    .button_group {
+        position: absolute;
+        width: 100%;
+        border: none;
+        text-align: center;
+        bottom:10px;
+        .add {
+            @include button(#a92f2f,60%);
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .view {
+            @include button(#07127a,40%);
+            &:hover {
+                cursor: help;
+            }
+        }
+    }
+    .vote {
+        text-align: center;
+    }
+
+}

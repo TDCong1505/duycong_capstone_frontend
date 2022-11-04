@@ -1,0 +1,64 @@
+.container {
+  border: 2px solid rgb(169, 47, 47);
+  margin: 5rem 0 5rem 0;
+  border-radius: 20px;
+
+  .background {
+    height: 120px;
+    display: flex;
+    background-image: url("https://img.freepik.com/free-vector/abstract-blue-geometric-shapes-background_1035-17545.jpg?w=2000");
+    background-size: cover;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    .avatar {
+      position: absolute;
+      bottom: -32px;
+      left: 50px;
+    }
+    .name {
+      position: absolute;
+      font-size: 2rem;
+      bottom: -38px;
+      left: 150px;
+      h4 {
+        color: #a92f2f;
+      }
+    }
+  }
+
+  .form {
+    margin-top: 2rem;
+  }
+
+  .info {
+    min-height: 400px;
+    margin-top: 5rem;
+    .switch {
+      font-size: 1rem;
+      color: #a92f2f;
+      font-style: italic;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .container {
+    .background {
+      .avatar {
+        position: absolute;
+        bottom: -32px;
+        left: 20px;
+      }
+      .name {
+        position: absolute;
+        font-size: 1.5rem;
+        bottom: -30px;
+        left: 100px;
+        h4 {
+          color: #a92f2f;
+        }
+      }
+    }
+  }
+}

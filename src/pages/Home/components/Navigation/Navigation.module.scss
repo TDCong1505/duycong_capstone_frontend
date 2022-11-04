@@ -1,0 +1,90 @@
+$whiteColor: white;
+$redColor: #a92f2f;
+$divHeight: 70px;
+
+@mixin cart() {
+  font-size: 2.5rem;
+  line-height: 70px;
+  color: white;
+}
+
+.nav_mobile {
+  height: $divHeight;
+  background-color: $redColor;
+  display: none;
+  .logo {
+    color: $whiteColor;
+    font-size: 8em;
+    margin-top: -22px;
+  }
+  .contact {
+    margin-bottom: -5px;
+    margin-top: 1em;
+    color: $whiteColor;
+  }
+  .phone {
+    color: $whiteColor;
+    font-size: 1.5rem;
+  }
+  .toggle {
+    font-size: 2.5rem;
+    line-height: 70px;
+    color: $whiteColor;
+  }
+  .cart {
+    @include cart
+  }
+}
+
+.nav {
+  display: flex !important;
+  height: $divHeight;
+  color: $redColor;
+  &_link {
+    width: 70px;
+    height: $divHeight;
+    font-size: 1.2rem;
+    padding: 10px;
+    line-height: $divHeight;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $redColor;
+  }
+  :hover {
+    color: black;
+  }
+  .logo {
+    font-size: 5rem;
+    line-height: 70px;
+    color:$redColor;
+  }
+  .phone {
+    color: $redColor;
+    font-size: 1.2rem;
+  }
+}
+
+.search {
+  background-color: #a92f2f;
+  height: $divHeight;
+  .cart {
+    font-size: 1.2rem;
+    line-height: $divHeight;
+    color:white;
+    .sum {
+      margin-left: 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .nav_mobile {
+    display: flex;
+  }
+  .nav {
+    display: none !important;
+  }
+  .search {
+    display: none;
+  }
+}

@@ -1,0 +1,37 @@
+.container {
+  display: flex ;
+  justify-content: center;
+}
+
+.empty {
+  width:100%;
+  min-height: 300px;
+  margin-top:5rem !important;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+  .heading {
+    text-transform: uppercase;
+    font-style: italic;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: #a92f2f;
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+    width: 100%;
+    justify-items: center;
+  }
+}
+
+@media screen and (max-width:640px) {
+  .header {
+    .heading {
+      background-color: #a92f2f;
+      width:100%;
+      border-radius: 25px;
+      clip-path: none;
+    }
+  }
+}

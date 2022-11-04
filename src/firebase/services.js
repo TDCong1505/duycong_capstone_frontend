@@ -1,0 +1,1 @@
+export const GHOST = "rgb(231 208 208)";

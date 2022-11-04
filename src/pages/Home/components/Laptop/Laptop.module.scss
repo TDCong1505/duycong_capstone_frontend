@@ -1,0 +1,15 @@
+.container {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    .filter {
+        display: block;
+    }
+}
+
+@media screen and (max-width:640px) {
+    .container {
+        .filter {
+            display: none;
+        }
+    }
+}

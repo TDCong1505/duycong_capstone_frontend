@@ -1,0 +1,27 @@
+@mixin button($color:blue) {
+    background-color: $color;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    color:white;
+    font-size: 1rem;
+}
+
+.buttonLogin {
+    @include button(#07127a);
+}
+
+.buttonFacebook {
+    @include button(#1890ff);
+    width: 100%;
+}
+
+.buttonGoogle {
+    @include button(#a92f2f);
+    width: 100%;
+}
+
+.buttonPhone {
+    @include button(#d14915d6);
+    width: 100%;
+}

@@ -1,0 +1,45 @@
+$redColor : #a92f2f;
+
+.footer {
+    background-color: $redColor;
+    
+    .container {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem; 
+        .title {
+            box-sizing: border-box;
+            .heading {
+                font-weight: 600;
+                font-size: 1.4rem;
+                text-transform: uppercase;
+            }
+            .logo {
+                font-size: 5rem;
+                color: white;
+            }
+            .link {
+                margin:1rem 0 1rem 1rem;
+                color: white;
+                font-size: 1rem;
+                display: block;
+                .icon {
+                    font-size: 2.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .footer {
+        .container {
+            display: block;
+            .title {
+                .link {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}

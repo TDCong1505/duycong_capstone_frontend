@@ -1,0 +1,37 @@
+
+.container {
+    border: 2px solid #a92f2f;
+    margin-top: 2rem;
+    border-radius: 20px;
+    min-height: 500px;
+    padding:0.5rem;
+    display: flex !important;
+    .desc {
+        .fieldset {
+            border: 1px solid #cccccc;
+            position:relative;
+            padding:1rem;
+            height: 100%;
+            border-radius: 20px;
+            .legend {
+                color:#a92f2f;
+                font-size: 1.2rem;  
+            }
+            .avatar {
+                display: flex;
+                justify-content: space-between;
+                height: 40px;
+                .name {
+                    font-size: 1rem;
+                    color: #a92f2f;
+                }
+                .date {
+                    line-height: 40px;
+                }
+            }
+            .comment {
+                margin-left: 40px;
+            }
+        }
+    }
+}
