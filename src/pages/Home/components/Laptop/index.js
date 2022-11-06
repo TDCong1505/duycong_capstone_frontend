@@ -1,4 +1,4 @@
-import { Col } from "antd";
+import { Col, message } from "antd";
 import React, { useEffect, useState } from "react";
 import ProductService from "../../../../services/auth/ProductService";
 import SliderPhone from "../Phone/SliderPhone";
@@ -14,12 +14,21 @@ const Laptop = () => {
     try {
       let res = await ProductService.getProductsByProductLineCode("DELL");
       setProduct(res.data);
-      // setTimeout(setLoading(false),5000);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
+  const handleFilter = async (values) => {
+    try {
+      let res = await ProductService.getProductPhotosByProductCode(values.toUpperCase());
+      setProduct(res.data);
+      setTimeout(setLoading(false),5000);
+    } catch ( error ){
+      console.log(error);
+      message.error("Hệ thống xảy ra lỗi !");
+    } 
+  }
 
   useEffect(() => {
     loadProduct();
@@ -35,7 +44,7 @@ const Laptop = () => {
       >
         <Banner></Banner>
         <div className={styles.filter}>
-          <ComputerFilter></ComputerFilter>
+          <ComputerFilter filter={(values) => handleFilter(values)}></ComputerFilter>
         </div>
         <SliderPhone name={"Laptop"} loading={loading} data={product}></SliderPhone>
       </Col>

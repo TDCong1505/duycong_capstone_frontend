@@ -12,7 +12,7 @@ const Phone = () => {
   const handleFilter = async (values) => {
     setLoading(true);
     try {
-      let res = await ProductService.getProductsByProductLineCode(values);
+      let res = await ProductService.getProductsByProductLineCode(values.toUpperCase());
       setProduct(res.data);
       setTimeout(setLoading(false),5000);
     } catch (error) {

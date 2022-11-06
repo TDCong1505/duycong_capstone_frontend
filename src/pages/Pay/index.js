@@ -1,5 +1,6 @@
 import { RightOutlined } from "@ant-design/icons";
-import { Button, Col, Input, message, Row } from "antd";
+import { Button, Col, Form, Input, message, Row } from "antd";
+import { useForm } from "antd/lib/form/Form";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -12,10 +13,48 @@ export default function Pay() {
   const { shoppingCart } = useSelector((redux) => redux.cart);
   const [customer, setCustomer] = useState({});
   const [comment, setComment] = useState("");
+  const [form] = useForm();
+  const onFinish = async (values) => {
+    try {
+      let resOrder = await OrderService.postOrder(customer.id, {
+        comment: comment,
+      });
+      let orderId = resOrder.data.id;
+      {
+        shoppingCart.map(async (detail) => {
+          let resOderDetail = await OrderDetailService.postOrderDetail(
+            detail.productCode,
+            orderId,
+            {
+              quantityOrder: detail.quantity,
+              priceEach: detail.buyPrice,
+            }
+          );
+        });
+      }
+      message.success("Gửi đơn hàng thành công !");
+    } catch (err){
+      console.log(err);
+    }
+  }
+
+  const onFinishFailed = () => {
+    message.error("Hãy nhập đẩy đủ thông tin cho đơn hàng .")
+  }
+
   const loadUser = async () => {
     const email = localStorage.getItem("emailUser");
-    let res = await CustomerService.getByEmail(email);
-    setCustomer(res.data);
+    if (email) {
+      let res = await CustomerService.getByEmail(email);
+      setCustomer(res.data);
+      console.log(res.data);
+      form.setFieldsValue({
+        fullname: `${res.data.firstName} ${res.data.lastName}`,
+        email: res.data.email,
+        phoneNumber: res.data.phoneNumber,
+        address: res.data.address,
+      })
+    }
   };
   let sumPrice = 0;
   {
@@ -23,25 +62,6 @@ export default function Pay() {
       sumPrice += product.quantity * product.buyPrice;
     });
   }
-  const handleClick = async () => {
-    let resOrder = await OrderService.postOrder(customer.id, {
-      comment: comment,
-    });
-    let orderId = resOrder.data.id;
-    {
-      shoppingCart.map(async (detail) => {
-        let resOderDetail = await OrderDetailService.postOrderDetail(
-          detail.productCode,
-          orderId,
-          {
-            quantityOrder: detail.quantity,
-            priceEach: detail.buyPrice,
-          }
-        );
-      });
-    }
-    message.success("Gửi đơn hàng thành công !");
-  };
   useEffect(() => {
     loadUser();
   }, []);
@@ -67,51 +87,80 @@ export default function Pay() {
               </NavLink>
             </h3>
           </Col>
-          <Row style={{ margin: "1rem" }}>
-            <Col span={24}>
-              <Input
-                style={{ width: "100%", fontSize: "16px" }}
-                placeholder="Họ và tên ..."
-                value={customer.firstName + " " + customer.lastName}
-              ></Input>
-            </Col>
-          </Row>
-          <Row style={{ margin: "1rem" }}>
-            <Col span={24}>
-              <Input
-                style={{ width: "100%", fontSize: "16px" }}
-                placeholder="Địa chỉ Email ... "
-                value={customer.email}
-              ></Input>
-            </Col>
-          </Row>
-          <Row style={{ margin: "1rem" }}>
-            <Col span={24}>
-              <Input
-                style={{ width: "100%", fontSize: "16px" }}
-                placeholder="Số điện thoại"
-                value={customer.phoneNumber}
-              ></Input>
-            </Col>
-          </Row>
-          <Row style={{ margin: "1rem" }}>
-            <Col span={24}>
-              <Input
-                style={{ width: "100%", fontSize: "16px" }}
-                placeholder="Địa chỉ"
-                value={customer.address}
-              ></Input>
-            </Col>
-          </Row>
-          <Row style={{ margin: "1rem" }}>
-            <Col span={24}>
-              <Input
-                style={{ width: "100%", fontSize: "16px" }}
-                placeholder="Ghi chú ..."
-                onChange={(e) => setComment(e.target.value)}
-              ></Input>
-            </Col>
-          </Row>
+          <Form
+            form={form}
+            onFinish={onFinish}
+            name="infoUser"
+            onFinishFailed={onFinishFailed}
+            >
+            <Row style={{ margin: "1rem" }}>
+              <Form.Item
+                label="Họ và tên"
+                name="fullname"
+                rules={[{ required: true, message: 'Nhập họ tên của bạn .' }]}
+              >
+                <Input
+                  style={{ width: "100%", fontSize: "16px" }}
+                  placeholder="Họ và tên ..."
+                ></Input>
+              </Form.Item>
+            </Row>
+            <Row style={{ margin: "1rem" }}>
+              <Form.Item
+                label="Địa chỉ Email"
+                name="email"
+                rules={[{ required: true, message: 'Nhập địa chỉ email của bạn .' }]}
+              >
+                <Input
+                  style={{ width: "100%", fontSize: "16px" }}
+                  placeholder="Địa chỉ Email ... "
+                ></Input>
+              </Form.Item>
+            </Row>
+            <Row style={{ margin: "1rem" }}>
+              <Form.Item
+                label="Số điện thoại"
+                name="phoneNumber"
+                rules={[{ required: true, message: 'Nhập số điện thoại của bạn .' }]}
+              >
+                <Input
+                  style={{ width: "100%", fontSize: "16px" }}
+                  placeholder="Số điện thoại"
+                ></Input>
+              </Form.Item>
+            </Row>
+            <Row style={{ margin: "1rem" }}>
+              <Form.Item
+                label="Địa chỉ"
+                name="address"
+                rules={[{ required: true, message: 'Nhập địa chỉ giao hàng .' }]}
+              >
+                <Input
+                  style={{ width: "100%", fontSize: "16px" }}
+                  placeholder="Địa chỉ"
+                ></Input>
+              </Form.Item>
+            </Row>
+            <Row style={{ margin: "1rem" }}>
+              <Form.Item
+                label="Ghi chú"
+                name="comment"
+              >
+                <Input
+                  style={{ width: "100%", fontSize: "16px" }}
+                  placeholder="Ghi chú ..."
+                ></Input>
+              </Form.Item>    
+            </Row>
+            <Row className={styles.submit}>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Gửi đơn hàng
+                </Button>
+              </Form.Item>
+              </Row>
+          </Form>
+
         </Col>
         <Col md={{ span: 14 }} className={styles.feild}>
           <Col span={24}>
@@ -158,11 +207,7 @@ export default function Pay() {
               <Button type="primary">Tiếp tục mua hàng</Button>
             </NavLink>
           </Row>
-          <Row style={{ margin: "1rem" }}>
-            <Button type="primary" onClick={handleClick}>
-              Gửi đơn hàng
-            </Button>
-          </Row>
+
         </Col>
       </Col>
     </>
