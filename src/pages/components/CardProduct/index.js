@@ -22,8 +22,9 @@ const CardProduct = ({ product }) => {
     if(historyProduct){
       const parseHistory = JSON.parse(historyProduct);
       parseHistory.push({
-        productName:product.productName,
+        id:product.productName,
         buyPrice:product.buyPrice,
+        productCode:product.productCode,
         mainPhotoURL:product.mainPhotoURL,
       })
       localStorage.setItem('historyProduct',stringify(parseHistory));
@@ -31,6 +32,7 @@ const CardProduct = ({ product }) => {
       localStorage.setItem('historyProduct',stringify([{
         productName:product.productName,
         buyPrice:product.buyPrice,
+        productCode:product.productCode,
         mainPhotoURL:product.mainPhotoURL,
       }]));
     }
