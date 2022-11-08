@@ -20,7 +20,7 @@ export const servicePaths = {
 
     //photo
     getPhotoByProductCode: '/productphotos/productCode/',
-
+    
     //order
     postOrder: '/orders/customerId/',
     getOrdersOfCustomer: '/orders/customerId/',

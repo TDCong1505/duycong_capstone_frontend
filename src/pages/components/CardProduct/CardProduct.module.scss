@@ -43,13 +43,13 @@
         text-align: center;
         bottom:10px;
         .add {
-            @include button(#a92f2f,60%);
+            @include button(#a92f2f,55%);
             &:hover {
                 cursor: pointer;
             }
         }
         .view {
-            @include button(#07127a,40%);
+            @include button(#07127a,35%);
             &:hover {
                 cursor: help;
             }

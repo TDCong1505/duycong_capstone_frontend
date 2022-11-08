@@ -2,11 +2,12 @@ import { Avatar, Col, Empty, Input, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ProductDescService from "../../services/auth/ProductDescService";
+import ProductPhotoService from "../../services/auth/ProductPhotoService";
 import ProductService from "../../services/auth/ProductService";
 import VoteService from "../../services/auth/VoteService";
 import styles from "./Detail.module.scss";
 import Properties from "./Properties";
-
+import SlidePhoto from "./Photos";
 
 const convertTime = (time) => {
   let date = new Date(time);
@@ -40,11 +41,13 @@ const View = () => {
     try {
       let res = await VoteService.getVoteByProductCode(code);
       setVotes(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  
+
   useEffect(() => {
     loadDetail();
     loadDesc();
@@ -74,6 +77,9 @@ const View = () => {
                 </h3>
                 <h4>{product.productDescripttion}</h4>
               </div>
+              <div>
+                <SlidePhoto code={code}></SlidePhoto>
+              </div>
               <hr></hr>
               <div>
                 <div className={styles.legend}>Bình luận :</div>
@@ -93,7 +99,7 @@ const View = () => {
                     </>
                   );
                 }) : (<Empty description="Chưa có bình luận nào cho sản phẩm này " />)}
-                
+
               </div>
             </div>
           </Col>

@@ -3,7 +3,7 @@ import { servicePaths } from "../../path";
 
 const ProductPhotoService = {
 
-    getAllPhotos: params => ApiService().get(servicePaths.getPhotosByProductCode + params),
+    getAllPhotos: params => ApiService().get(servicePaths.getPhotoByProductCode + params),
 
 }
 
