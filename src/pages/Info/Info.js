@@ -17,18 +17,27 @@ import styles from "./Info.module.scss";
 export default function Info() {
   const emailUser = localStorage.getItem("emailUser");
   const [user, setUser] = useState({});
+  const [ currentUser , setCurrentUser ] = useState(0);
   const [visibleSwitch,setVisibleSwitch] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState(true);
 
   const onFormLayoutChange = ({ disabled }) => {
     setComponentDisabled(disabled);
   };
+
   const [ form ] = useForm();
   const onFinish = async (values) => {
-    values.email = user.email;
-    let res = await CustomerService.updateCustomer(user.id, values);
-    message.success("Cập nhật thông tin thành công !");
-    loadDetail();
+    if(currentUser === 1){
+      values.email = user.email;
+      let res = await CustomerService.updateCustomer(user.id, values);
+      message.success("Cập nhật thông tin thành công !");
+      loadDetail();
+    } else {
+      let res = await CustomerService.createCustomer(values);
+      message.success("Cập nhật thông tin cho tài khoản thành công !");
+      loadDetail();
+    }
+    
   };
 
   const handleChange = (e) => {
@@ -42,17 +51,26 @@ export default function Info() {
   };
 
   const loadDetail = async () => {
-    let res = await CustomerService.getByEmail(emailUser);
-    setUser(res.data);
-    const userData = res.data;
-    form.setFieldsValue({
-      firstName:userData.firstName,
-      lastName:userData.lastName,
-      city:userData.city,
-      country:userData.country,
-      phoneNumber:userData.phoneNumber,
-      address:userData.address,
-    })
+    try {
+      let res = await CustomerService.getByEmail(emailUser);
+      setUser(res.data);
+      console.log(res.data);
+      setCurrentUser(1);
+      const userData = res.data;
+      form.setFieldsValue({
+        firstName:userData.firstName,
+        lastName:userData.lastName,
+        city:userData.city,
+        country:userData.country,
+        phoneNumber:userData.phoneNumber,
+        address:userData.address,
+        email:emailUser
+      })
+    } catch (error) {
+      console.log(error);
+      setCurrentUser(0);
+    }
+    
   };
 
   useEffect(() => {
@@ -105,7 +123,10 @@ export default function Info() {
             onValuesChange={onFormLayoutChange}
             disabled={componentDisabled}
             form={form}
-          >
+          > 
+            <Form.Item label="Địa chỉ email" name="email">
+              <Input disabled />
+            </Form.Item>
             <Form.Item label="Họ và tên đệm" name="firstName">
               <Input />
             </Form.Item>

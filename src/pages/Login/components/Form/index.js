@@ -34,8 +34,8 @@ export default function LoginRegister({ value }) {
         "username": values.email,
         "password": values.password
       });
-      localStorage.getItem("emailUser",res.data);
       message.success("Đăng nhập thành công !");
+      localStorage.setItem("emailUser",values.email);
       negative('/userInfo');
     } catch (error) {
       console.log(error);
