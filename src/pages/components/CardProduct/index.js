@@ -39,7 +39,8 @@ const CardProduct = ({ product }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div style={{display:"flex",justifyContent:"center"}}>
+      <div className={styles.container}>
       <Image
         alt="image"
         className={styles.image}
@@ -57,6 +58,8 @@ const CardProduct = ({ product }) => {
         <Rate value={5}></Rate>
       </div>
     </div>
+    </div>
+    
   );
 };
 

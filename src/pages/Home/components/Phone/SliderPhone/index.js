@@ -17,14 +17,23 @@ const SliderPhone = ({ data, name, loading }) => {
     slidesToScroll: 3,
     responsive: [
       {
-        breakpoint: 640,
+        breakpoint: 1450,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 720,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
-          dots: true,
+          dots: false,
         },
-      },
+      }
     ],
   };
   return (
@@ -34,15 +43,15 @@ const SliderPhone = ({ data, name, loading }) => {
         <div className={styles.heading}>{name}</div>
       </div>
       <Spin indicator={antIcon} spinning={loading}>
-        <div>
+        <div >
           {data?.length ? (
             <>
               <Slider {...settings}>
                 {data?.map((product) => {
                   return (
-                    <>
+                    <div>
                       <CardProduct product={product}></CardProduct>
-                    </>
+                    </div>
                   );
                 })}
               </Slider>
