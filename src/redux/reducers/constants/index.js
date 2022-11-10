@@ -5,7 +5,7 @@ export const DELETE_PRODUCT_IN_CART = 'DELETE_PRODUCT_IN_CART';
 export const VIEW_PRODUCT = 'VIEW_PRODUCT';
 
 //API
-export const URL = "http://localhost:8080/capstone/";
+export const URL = "https://chilling-crypt-20162.herokuapp.com/api/v1/";
 export const UPDATE_PRODUCT_LINES = "UPDATE_PRODUCT_LINES";
 export const UPDATE_PRODUCT_TYPES = "UPDATE_PRODUCT_TYPES"
 export const UPDATE_PRODUCTS = "UPDATE_PRODUCTS";

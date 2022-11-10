@@ -14,6 +14,12 @@ export default function Pay() {
   const [customer, setCustomer] = useState({});
   const [comment, setComment] = useState("");
   const [form] = useForm();
+  let sumPrice = 0;
+  {
+    shoppingCart.map((product) => {
+      sumPrice += product.quantity * product.buyPrice;
+    });
+  }
   const onFinish = async (values) => {
     try {
       let resOrder = await OrderService.postOrder(customer.id, {
@@ -32,6 +38,10 @@ export default function Pay() {
           );
         });
       }
+      let newCustomer = customer;
+      newCustomer.creditLimit = customer.creditLimit + sumPrice;
+      let updateCustomer = CustomerService.updateCustomer(customer.id,newCustomer);
+      console.log(updateCustomer);
       message.success("Gửi đơn hàng thành công !");
     } catch (err){
       console.log(err);
@@ -39,15 +49,14 @@ export default function Pay() {
   }
 
   const onFinishFailed = () => {
-    message.error("Hãy nhập đẩy đủ thông tin cho đơn hàng .")
+    message.error("Hãy nhập đẩy đủ thông tin cho đơn hàng .");
   }
 
-  const loadUser = async () => {
+  const loadCustomer = async () => {
     const email = localStorage.getItem("emailUser");
     if (email) {
       let res = await CustomerService.getByEmail(email);
       setCustomer(res.data);
-      console.log(res.data);
       form.setFieldsValue({
         fullname: `${res.data.firstName} ${res.data.lastName}`,
         email: res.data.email,
@@ -56,14 +65,8 @@ export default function Pay() {
       })
     }
   };
-  let sumPrice = 0;
-  {
-    shoppingCart.map((product) => {
-      sumPrice += product.quantity * product.buyPrice;
-    });
-  }
   useEffect(() => {
-    loadUser();
+    loadCustomer();
   }, []);
   return (
     <>
