@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, message, Row } from "antd";
 import React from "react";
 import {
   FacebookOutlined,
@@ -6,21 +6,21 @@ import {
   UserOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import firebase, { auth , db } from '../../../../firebase/config'
+import firebase, { auth, db } from '../../../../firebase/config'
 import { useDispatch } from "react-redux";
 import { login } from "../../../../redux/actions/login";
 import "antd/dist/antd.css";
-import { getAuth, signOut } from "firebase/auth";
 import CustomerService from "../../../../services/auth/CustomerService";
 import styles from './Form.module.scss';
-
+import AuthService from "../../../../services/auth/AuthService";
+import { useNavigate } from "react-router";
 
 const fbProvider = new firebase.auth.FacebookAuthProvider();
 const GgProvider = new firebase.auth.GoogleAuthProvider();
 export default function LoginRegister({ value }) {
 
   const dispatch = useDispatch();
-
+  const negative = useNavigate();
   const handleFbLogin = () => {
     auth.signInWithPopup(fbProvider).then((data) => {
       dispatch(login(data));
@@ -28,23 +28,45 @@ export default function LoginRegister({ value }) {
     });
   };
 
-  const onFinish = () => {
-
+  const onFinishLogin = async (values) => {
+    try {
+      let res = await AuthService.Login({
+        "username": values.email,
+        "password": values.password
+      });
+      localStorage.getItem("emailUser",res.data);
+      message.success("Đăng nhập thành công !");
+      negative('/userInfo');
+    } catch (error) {
+      console.log(error);
+    }
   }
-   
+
+  const onFinishRegister = async (values) => {
+    try {
+      let res = await AuthService.Register({
+        "username":values.email,
+        "password":values.password
+      });
+      message.success("Đăng ký tài khoản thành công !");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleGgLogin = () => {
-    auth.signInWithPopup(GgProvider).then( async (data) => {
+    auth.signInWithPopup(GgProvider).then(async (data) => {
       dispatch(login(data));
-      localStorage.setItem('emailUser',data.additionalUserInfo.profile.email);
-      if(data.additionalUserInfo.isNewUser == true){
+      localStorage.setItem('emailUser', data.additionalUserInfo.profile.email);
+      if (data.additionalUserInfo.isNewUser == true) {
         let response = await CustomerService.createCustomer({
-          email:data.additionalUserInfo.profile.email,
-          firstName:data.additionalUserInfo.profile.given_name,
-          lastName:data.additionalUserInfo.profile.family_name,
-          country:data.additionalUserInfo.profile.locale,
-          creditLimit:0,
-          salesRepEmployeeNumber:0,
-          avatarLink:data.additionalUserInfo.profile.picture,
+          email: data.additionalUserInfo.profile.email,
+          firstName: data.additionalUserInfo.profile.given_name,
+          lastName: data.additionalUserInfo.profile.family_name,
+          country: data.additionalUserInfo.profile.locale,
+          creditLimit: 0,
+          salesRepEmployeeNumber: 0,
+          avatarLink: data.additionalUserInfo.profile.picture,
         });
       }
     });
@@ -62,20 +84,21 @@ export default function LoginRegister({ value }) {
               initialValues={{
                 remember: true,
               }}
-              onFinish={onFinish}
+              onFinish={onFinishLogin}
             >
               <Form.Item
-                name="username"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: "Hãy điền tên đăng nhập!",
+                    type: "email",
+                    message: "Hãy nhập vào email của bạn!",
                   },
                 ]}
               >
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="Tên đăng nhập"
+                  placeholder="Địa chỉ email"
                 />
               </Form.Item>
               <Form.Item
@@ -108,7 +131,7 @@ export default function LoginRegister({ value }) {
                   htmlType="submit"
                   className={styles.buttonLogin}
                 >
-                  Đăng nhập 
+                  Đăng nhập
                 </Button>
                 <a style={{ float: "right" }} href="">
                   Hoặc đăng ký ngay
@@ -160,21 +183,59 @@ export default function LoginRegister({ value }) {
               initialValues={{
                 remember: true,
               }}
-              onFinish={onFinish}
+              onFinish={onFinishRegister}
             >
               <Form.Item
-                name="username"
+                name="email"
                 rules={[
                   {
-                    required: true,
-                    message: "Hãy điền tên đăng nhập!",
+                    type: "email",
+                    message: "Vui lòng nhập đúng định dạng email !",
                   },
+                  {
+                    required: true,
+                    message: "Vui lòng điền vào email của bạn ."
+                  }
                 ]}
               >
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="Hãy điền email của bạn"
+                  placeholder="Địa chỉ email ."
                 />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Nhập vào mật khẩu của bạn!',
+                  },
+                ]}
+                hasFeedback
+              >
+                <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Mật khẩu ."/>
+              </Form.Item>
+
+              <Form.Item
+                name="confirm"
+                dependencies={['password']}
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập vào mật khẩu xác nhận !',
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Hai mật khẩu phải giống nhau'));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Mật khẩu xác nhận ." />
               </Form.Item>
               <Form.Item>
                 <Button
@@ -189,10 +250,10 @@ export default function LoginRegister({ value }) {
           </Col>
         </Row>
         <Row>
-              <Col align="middle" span={24}>
-                <h4>Hoặc đăng nhập bằng</h4>
-              </Col>
-            </Row>
+          <Col align="middle" span={24}>
+            <h4>Hoặc đăng nhập bằng</h4>
+          </Col>
+        </Row>
         <Row style={{ marginTop: "1rem", display: "flex" }}>
           <Col span={12}>
             <Button

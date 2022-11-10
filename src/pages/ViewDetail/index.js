@@ -65,7 +65,7 @@ const View = () => {
         <Row>
           <Col
             md={{ span: 14, offset: 0 }}
-            xs={{ span: 24 }}
+            sm={{ span: 24 }}
             className={styles.desc}
           >
             <div className={styles.fieldset}>
@@ -103,7 +103,7 @@ const View = () => {
               </div>
             </div>
           </Col>
-          <Col md={{ span: 10 }} xs={{ span: 24 }} className={styles.desc}>
+          <Col md={{ span: 10 }} sm={{ span: 24 }} className={styles.desc}>
             <div className={styles.fieldset}>
               <div className={styles.legend}> Thông số kỹ thuật :</div>
               {Object.keys(product).length && (

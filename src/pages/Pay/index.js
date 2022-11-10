@@ -41,7 +41,6 @@ export default function Pay() {
       let newCustomer = customer;
       newCustomer.creditLimit = customer.creditLimit + sumPrice;
       let updateCustomer = CustomerService.updateCustomer(customer.id,newCustomer);
-      console.log(updateCustomer);
       message.success("Gửi đơn hàng thành công !");
     } catch (err){
       console.log(err);
@@ -77,7 +76,7 @@ export default function Pay() {
         sm={{ span: 20, offset: 2 }}
         className={styles.container}
       >
-        <Col md={{ span: 10 }} className={styles.feild}>
+        <Col className={styles.feild}>
           <Col span={24}>
             <h3>
               Thông tin cá nhân :{" "}
@@ -165,7 +164,7 @@ export default function Pay() {
           </Form>
 
         </Col>
-        <Col md={{ span: 14 }} className={styles.feild}>
+        <Col className={styles.feild}>
           <Col span={24}>
             <h3>Thông tin đơn hàng :</h3>
           </Col>

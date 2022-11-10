@@ -34,5 +34,10 @@ export const servicePaths = {
 
     //vote 
     getVoteByProductCode: '/votes/productCode/',
+
+
+    //auth 
+    login: "/login",
+    register:"/register"
     
 }
